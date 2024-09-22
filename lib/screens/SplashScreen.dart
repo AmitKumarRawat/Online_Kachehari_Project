@@ -1,25 +1,21 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter_online_kachehari/screens/HomePage.dart';
 import 'package:flutter_online_kachehari/screens/Login_Screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class Splashscreen extends StatefulWidget {
   const Splashscreen({super.key});
   @override
-  State<Splashscreen> createState() => _SplashscreenState();
+  State<Splashscreen> createState() => SplashscreenState();
 }
 
-class _SplashscreenState extends State<Splashscreen> {
+class SplashscreenState extends State<Splashscreen> {
+  static const String statusToGo = 'isLogin';
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      Timer(const Duration(seconds: 3), () {
-        Navigator.of(context)
-            .pushReplacement(MaterialPageRoute(builder: (context) {
-          return const Login_Screen();
-        }));
-      });
-    });
+    whereToGo();
   }
 
   @override
@@ -50,5 +46,32 @@ class _SplashscreenState extends State<Splashscreen> {
         ],
       ),
     ));
+  }
+  
+  void whereToGo()async {
+    //for direct redirecting at home page
+
+    var sharedPref = await SharedPreferences.getInstance();
+    var loginCheck = sharedPref.getBool(statusToGo);
+    if(loginCheck==true){ 
+      print('true condition run here ');
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer(const Duration(seconds: 3), () {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return  HomePage();
+        }));
+      });
+    });
+    }else{
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+      Timer(const Duration(seconds: 3), () {
+        Navigator.of(context)
+            .pushReplacement(MaterialPageRoute(builder: (context) {
+          return const Login_Screen();
+        }));
+      });
+    });
+    }
   }
 }

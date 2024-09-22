@@ -10,9 +10,11 @@ import 'package:flutter_online_kachehari/screens/Policy.dart';
 import 'package:flutter_online_kachehari/screens/ProfileScreen.dart';
 import 'package:flutter_online_kachehari/screens/Services.dart';
 import 'package:flutter_online_kachehari/screens/Settings.dart';
+import 'package:flutter_online_kachehari/screens/SplashScreen.dart';
 import 'package:flutter_online_kachehari/screens/TermsConditions.dart';
 import 'package:flutter_online_kachehari/screens/TrendingBlogs.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -259,7 +261,7 @@ class _HomePageState extends State<HomePage> {
                 minTileHeight: 5,
                 leading: Icon(item['icon'], color: Colors.deepPurple),
                 title: Text(item['title']),
-                onTap: () {
+                onTap: ()async {
                   if (item['title'] == 'Profile') {
                     Navigator.of(context)
                         .push(MaterialPageRoute(builder: (context) => Edit()));
@@ -308,6 +310,8 @@ class _HomePageState extends State<HomePage> {
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => Customersupport()));
                   } else if (item['title'] == 'Logout') {
+                    var sharedPI = await  SharedPreferences.getInstance(); // for update login status 
+                    sharedPI.setBool(SplashscreenState.statusToGo, false);
                     Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => Login_Screen()));
                   }
